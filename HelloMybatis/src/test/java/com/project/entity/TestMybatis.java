@@ -1,15 +1,19 @@
-package com.domain;
+package com.project.entity;
 
-import com.dao.StudentDao;
-import com.util.MybatisUtil;
+import com.project.dao.StudentDao;
+import com.project.dao.UserDao;
+import com.project.util.MybatisUtil;
+import com.project.dao.TimeDao;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
 
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class TestMybatis {
@@ -58,4 +62,56 @@ public class TestMybatis {
         }
         sqlSession.close();
     }
+    @Test
+    public void testTime(){
+        SqlSession sqlSession=MybatisUtil.getSqlSession();
+        TimeDao timeDao=sqlSession.getMapper(TimeDao.class);
+        TimeTest timeTest=new TimeTest(LocalDateTime.now());
+        int result=timeDao.insertTime(timeTest);
+        System.out.println("insert结果： "+result);
+        sqlSession.commit();
+
+        sqlSession.close();
+    }
+    @Test
+    public void testUser(){
+        UserDao userDao=MybatisUtil.getSqlSession().getMapper(UserDao.class);
+        List<User> list=userDao.selectTest();
+        System.out.println(list);
+    }
+    @Test
+    public void testLogin(){
+        String email="123@qq.com";
+        String password="123";
+        SqlSession sqlSession=MybatisUtil.getSqlSession();
+        UserDao userDao= sqlSession.getMapper(UserDao.class);
+        User user= userDao.login(email);
+        System.out.println(user);
+
+    }
+    @Test
+    public void testInsert2(){
+        String id="2";
+        String fileRepositoryId="2";
+        String userName="Lucy";
+        String email="1234@com";
+        String password="1234";
+        LocalDateTime time= LocalDateTime.now();
+        String avatar=null;
+        String role="1";
+        User user=new User();
+        user.setId(id);
+        user.setFileRepositoryId(fileRepositoryId);
+        user.setUserName(userName);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setRegisterTime(time);
+        user.setRole(role);
+        SqlSession sqlSession=MybatisUtil.getSqlSession();
+        UserDao userDao= sqlSession.getMapper(UserDao.class);
+        int result=userDao.insertUser(user);
+        System.out.println(result);
+        sqlSession.commit();
+    }
+
 }

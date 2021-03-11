@@ -1,6 +1,6 @@
-package com.dao;
+package com.project.dao;
 
-import com.domain.Student;
+import com.project.entity.Student;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

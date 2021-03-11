@@ -1,4 +1,4 @@
-package com.domain;
+package com.project.entity;
 
 public class Student {
     private int id;
